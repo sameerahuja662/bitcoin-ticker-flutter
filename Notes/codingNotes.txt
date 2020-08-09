@@ -1,0 +1,67 @@
+
+/*
+
+items: [
+DropdownMenuItem(
+child: Text('USD'),
+value: 'USD',
+),
+DropdownMenuItem(
+child: Text('EUR'),
+value: 'EUR',
+),
+DropdownMenuItem(
+child: Text('GBP'),
+value: 'GBP',
+),
+DropdownMenuItem(
+child: Text('INR'),
+value: 'INR',
+),
+],*/
+
+/*
+
+currenciesList.map<DropdownMenuItem<String>>((String value) {
+return DropdownMenuItem<String>(
+value: value,
+child: Text(value),
+);
+}).toList(),*/
+
+/*
+DropdownButton<String>(
+value: selectedCurrency,
+items:
+,
+onChanged: (value) {
+setState(() {
+selectedCurrency = value;
+});
+},
+)*/
+
+/*//Prepare List of currencies for DropDownMenu.
+  List<DropdownMenuItem> getCurrencyItems() {
+    List<DropdownMenuItem<String>> dropDownMenuItems = [];
+    for (String currency in currenciesList) {
+      //Initialise new dropDownMenuItem items.
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      //Add menu items to the list.
+      dropDownMenuItems.add(newItem);
+    }
+
+    return dropDownMenuItems;
+  }*/
+
+/*List<Text> getPickerItems() {
+    List<Text> currencyPickerList = [];
+
+    for (String currency in currenciesList) {
+      currencyPickerList.add(Text(currency));
+    }
+    return currencyPickerList;
+  }*/
