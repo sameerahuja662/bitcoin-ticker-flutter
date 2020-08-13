@@ -12,6 +12,7 @@ class NetworkHelper {
       return jsonDecode(response.body);
     } else {
       print('Network Error, Status Code: ${response.statusCode}');
+      throw ('Error with the GET request');
     }
   }
 }

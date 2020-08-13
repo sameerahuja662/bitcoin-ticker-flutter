@@ -10,22 +10,16 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = currenciesList[0];
-  double btcFiatRate = 0;
-  double ethFiatRate = 0;
-  double ltcFiatRate = 0;
-  CoinData coinData = CoinData();
+  Map<String, double> cryptoFiatValues = {};
 
   void getCoinData() async {
-    Map<String, double> fiatRates =
-        await coinData.getCryptoRates(selectedCurrency);
-    if (fiatRates != null) {
+    try {
+      var cryptoData = await CoinData().getCryptoRates(selectedCurrency);
       setState(() {
-        btcFiatRate = fiatRates['BTC'];
-        ethFiatRate = fiatRates['ETH'];
-        ltcFiatRate = fiatRates['LTC'];
+        cryptoFiatValues = cryptoData;
       });
-    } else {
-      print('Print Network error');
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -56,7 +50,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $btcFiatRate $selectedCurrency',
+                  '1 BTC = ${cryptoFiatValues['BTC']} $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -77,7 +71,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 ETH = $ethFiatRate $selectedCurrency',
+                  '1 ETH = ${cryptoFiatValues['ETH']} $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -98,7 +92,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 LTC = $ltcFiatRate $selectedCurrency',
+                  '1 LTC = ${cryptoFiatValues['LTC']} $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -121,6 +115,7 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
+  // Android picker widget.
   DropdownButton getAndroidPicker() {
     //Prepare List of currencies for DropDownMenu.
     List<DropdownMenuItem<String>> dropDownMenuItems = [];
@@ -137,21 +132,15 @@ class _PriceScreenState extends State<PriceScreen> {
     return DropdownButton<String>(
       value: selectedCurrency,
       items: dropDownMenuItems,
-      onChanged: (value) async {
-        setState(() {
-          selectedCurrency = value;
-        });
-        Map<String, double> fiatRates =
-            await coinData.getCryptoRates(selectedCurrency);
-        setState(() {
-          btcFiatRate = fiatRates['BTC'];
-          ethFiatRate = fiatRates['ETH'];
-          ltcFiatRate = fiatRates['LTC'];
-        });
+      onChanged: (value) {
+        //Set newly changed currency as selected currency and call getCoinData() again.
+        selectedCurrency = value;
+        getCoinData();
       },
     );
   }
 
+  // Ios picker widget.
   CupertinoPicker getIosPicker() {
     List<Text> currencyPickerList = [];
 
@@ -161,86 +150,12 @@ class _PriceScreenState extends State<PriceScreen> {
     return CupertinoPicker(
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
-      onSelectedItemChanged: (selectedIndex) async {
-        setState(() {
-          selectedCurrency = currenciesList[selectedIndex];
-        });
-        Map<String, double> fiatRates =
-            await coinData.getCryptoRates(selectedCurrency);
-        setState(() {
-          btcFiatRate = fiatRates['BTC'];
-          ethFiatRate = fiatRates['ETH'];
-          ltcFiatRate = fiatRates['LTC'];
-        });
+      onSelectedItemChanged: (selectedIndex) {
+        //Set newly changed currency as selected currency and call getCoinData() again.
+        selectedCurrency = currenciesList[selectedIndex];
+        getCoinData();
       },
       children: currencyPickerList,
     );
   }
 }
-
-/*
-
-items: [
-DropdownMenuItem(
-child: Text('USD'),
-value: 'USD',
-),
-DropdownMenuItem(
-child: Text('EUR'),
-value: 'EUR',
-),
-DropdownMenuItem(
-child: Text('GBP'),
-value: 'GBP',
-),
-DropdownMenuItem(
-child: Text('INR'),
-value: 'INR',
-),
-],*/
-
-/*
-
-currenciesList.map<DropdownMenuItem<String>>((String value) {
-return DropdownMenuItem<String>(
-value: value,
-child: Text(value),
-);
-}).toList(),*/
-
-/*
-DropdownButton<String>(
-value: selectedCurrency,
-items:
-,
-onChanged: (value) {
-setState(() {
-selectedCurrency = value;
-});
-},
-)*/
-
-/*//Prepare List of currencies for DropDownMenu.
-  List<DropdownMenuItem> getCurrencyItems() {
-    List<DropdownMenuItem<String>> dropDownMenuItems = [];
-    for (String currency in currenciesList) {
-      //Initialise new dropDownMenuItem items.
-      var newItem = DropdownMenuItem(
-        child: Text(currency),
-        value: currency,
-      );
-      //Add menu items to the list.
-      dropDownMenuItems.add(newItem);
-    }
-
-    return dropDownMenuItems;
-  }*/
-
-/*List<Text> getPickerItems() {
-    List<Text> currencyPickerList = [];
-
-    for (String currency in currenciesList) {
-      currencyPickerList.add(Text(currency));
-    }
-    return currencyPickerList;
-  }*/
