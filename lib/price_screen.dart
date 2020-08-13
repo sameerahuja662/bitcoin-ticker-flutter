@@ -3,6 +3,8 @@ import 'coin_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
+import 'coin_data.dart';
+
 class PriceScreen extends StatefulWidget {
   @override
   _PriceScreenState createState() => _PriceScreenState();
@@ -11,10 +13,15 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = currenciesList[0];
   Map<String, double> cryptoFiatValues = {};
+  bool isWaiting =
+      false; //Var for keeping track of when waiting for network requests.Shows placeholder text while waiting for network request data.
 
   void getCoinData() async {
+    isWaiting = true; //Waiting for network request.
     try {
       var cryptoData = await CoinData().getCryptoRates(selectedCurrency);
+      isWaiting =
+          false; //Wait for network over after above code completes execution.
       setState(() {
         cryptoFiatValues = cryptoData;
       });
@@ -39,69 +46,7 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 BTC = ${cryptoFiatValues['BTC']} $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 ETH = ${cryptoFiatValues['ETH']} $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 LTC = ${cryptoFiatValues['LTC']} $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          makeCryptoCards(), //Returns Crypto card widgets for all currencies in crypto currencies list.
           Container(
             height: 150.0,
             alignment: Alignment.center,
@@ -112,6 +57,24 @@ class _PriceScreenState extends State<PriceScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Column makeCryptoCards() {
+    List<CryptoCard> cryptoCards = [];
+    for (String cryptoCurrency in cryptoList) {
+      cryptoCards.add(
+        CryptoCard(
+          cryptoCurrency: cryptoCurrency,
+          fiatValue:
+              isWaiting ? '...' : cryptoFiatValues[cryptoCurrency].toString(),
+          selectedCurrency: selectedCurrency,
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: cryptoCards,
     );
   }
 
@@ -156,6 +119,43 @@ class _PriceScreenState extends State<PriceScreen> {
         getCoinData();
       },
       children: currencyPickerList,
+    );
+  }
+}
+
+class CryptoCard extends StatelessWidget {
+  const CryptoCard({
+    this.fiatValue,
+    this.selectedCurrency,
+    this.cryptoCurrency,
+  });
+
+  final String fiatValue;
+  final String selectedCurrency;
+  final String cryptoCurrency;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+      child: Card(
+        color: Colors.lightBlueAccent,
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+          child: Text(
+            '1 $cryptoCurrency = $fiatValue $selectedCurrency',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
