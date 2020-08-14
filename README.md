@@ -1,6 +1,6 @@
 
 # Crypto Coins
-A Crypto Currency price checking app. Helps keep an eye on your crypto investments on the go.
+## A Crypto Currency price checking app. Helps keep an eye on your crypto investments on the go.
 Supports BTC, ETH and LTC prices into all major fiat currencies.
 
 The objective of this project was to learn about using Cupertino and Material Widgets in parallel and providing a different user interface depending on the platform.
