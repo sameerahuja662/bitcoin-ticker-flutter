@@ -1,20 +1,19 @@
 
-# Bitcoin Ticker 🤑
-A Crypto Currency price checking app. Monitor all your crypto investments on the move. Fetches live exchange rate data from Coin API.
-## Goal of the project
+# Crypto Coins
+## A Crypto Currency price checking app. Helps keep an eye on your crypto investments on the go.
+Supports BTC, ETH and LTC prices into all major fiat currencies.
 
-The objective of this project was to learn about using Cupertino and Material Widgets in parallel and providing a different user interface depending on the platform. Made as part of the Udemy Flutter Bootcamp.
-
-
-![Finished App](https://github.com/londonappbrewery/Images/blob/master/bitcoin-flutter-demo.gif)
-
-## What I learned
-
-- How to use the DropdownButton Widget from Material design.
-- How to loop through code using Dart for and for-in loops.
-- How to use Cupertino Widgets in your app.
-- How to check the platform your app is being run on to customise the UI for that platform.
-- Revise previous concepts by completing the challenges.
+The objective of this project was to learn about using Cupertino and Material Widgets in parallel and providing a different user interface depending on the platform.
+Platform specific widgets in flutter help provide a native app like look and feel and allows to follow different design guidelines for different platforms.
 
 
-![End Banner](https://github.com/londonappbrewery/Images/blob/master/readme-end-banner.png)
+## What i used in this project
+
+- DropdownButton Widget from Material design for Android platform.
+- Looping through lists in Dart for and for-in loops.
+- Cupertino Widgets in your app for iOS platform.
+- Check the platform your app is being run on to customise the UI for that platform.
+- Integration with coinAPI [https://docs.coinapi.io/#md-rest-api] for all Crypto values.
+(I still have a free account with coinAPI, so API calls are still limited.)
+
+Feedback appreciated and welcomed at dev.sameer@protonmail.com
