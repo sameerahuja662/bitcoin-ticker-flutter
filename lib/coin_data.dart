@@ -50,7 +50,7 @@ class CoinData {
 
         double result = coinData['rate'];
         cryptoFiatValues[cryptoCurrency] =
-            double.parse(result.toStringAsFixed(3));
+            double.parse(result.toStringAsFixed(2));
       } catch (e) {
         throw e;
       }
